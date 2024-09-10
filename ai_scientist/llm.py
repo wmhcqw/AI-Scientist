@@ -199,6 +199,21 @@ def get_response_from_llm(
         )
         content = response.choices[0].message.content
         new_msg_history = new_msg_history + [{"role": "assistant", "content": content}]
+    elif model in ["glm-4"]:
+        new_msg_history = msg_history + [{"role": "user", "content": msg}]
+        response = client.chat.completions.create(
+            model="glm-4",
+            messages=[
+                {"role": "system", "content": system_message},
+                *new_msg_history
+            ],
+            max_tokens=3000,
+            temperature=temperature,
+            n=1,
+            stop=None
+        )
+        content = response.choices[0].message.content
+        new_msg_history = new_msg_history + [{"role": "assistant", "content": content}]
     else:
         raise ValueError(f"Model {model} not supported.")
 

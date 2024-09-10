@@ -62,6 +62,8 @@ def parse_arguments():
             "vertex_ai/claude-3-5-sonnet@20240620",
             "vertex_ai/claude-3-sonnet@20240229",
             "vertex_ai/claude-3-haiku@20240307",
+            # Open Source models
+            "glm-4-9b-chat",
         ],
         help="Model to use for AI Scientist.",
     )
@@ -360,6 +362,16 @@ if __name__ == "__main__":
             api_key=os.environ["OPENROUTER_API_KEY"],
             base_url="https://openrouter.ai/api/v1",
         )
+    # Local Fake OpenAI API
+    elif args.model == "glm-4-9b-chat":
+        import openai
+        
+        print(f"Using Local OpenAI-like API with {args.model}.")
+        client_model = 'glm-4'
+        client = openai.OpenAI(
+            api_key="EMPTY",  # no api key for local server
+            base_url="http://127.0.0.1:8000/v1"
+        )    
     else:
         raise ValueError(f"Model {args.model} not supported.")
 
